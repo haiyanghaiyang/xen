@@ -205,13 +205,13 @@ SECTIONS
        . = ALIGN(PAGE_SIZE);
        *(.bss.page_aligned)
        . = ALIGN(PAGE_SIZE);
-       __per_cpu_start = .;
+       __per_cpu_start = .; ==> start of per cpu data area
        *(.bss.percpu.page_aligned)
-       *(.bss.percpu)
+       *(.bss.percpu) ==> per cpu variable are defined here
        . = ALIGN(SMP_CACHE_BYTES);
        *(.bss.percpu.read_mostly)
        . = ALIGN(SMP_CACHE_BYTES);
-       __per_cpu_data_end = .;
+       __per_cpu_data_end = .; ==> end of per cpu data area. The size of the area depends on how many per cpu variables
        *(.bss)
        . = ALIGN(POINTER_ALIGN);
        __bss_end = .;

@@ -11,14 +11,14 @@ extern unsigned long __per_cpu_offset[NR_CPUS];
 void percpu_init_areas(void);
 
 #define per_cpu(var, cpu)  \
-    (*RELOC_HIDE(&per_cpu__##var, __per_cpu_offset[cpu]))
+    (*RELOC_HIDE(&per_cpu__##var, __per_cpu_offset[cpu])) ==> same as per_cpu_ptr but provides address of the variable
 #define this_cpu(var) \
     (*RELOC_HIDE(&per_cpu__##var, READ_SYSREG(TPIDR_EL2)))
 
 #define per_cpu_ptr(var, cpu)  \
-    (*RELOC_HIDE(var, __per_cpu_offset[cpu]))
+    (*RELOC_HIDE(var, __per_cpu_offset[cpu])) ==> return *(var+_per_cpu_offset[cpu]), which is the value of the variable for #cpu
 #define this_cpu_ptr(var) \
-    (*RELOC_HIDE(var, READ_SYSREG(TPIDR_EL2)))
+    (*RELOC_HIDE(var, READ_SYSREG(TPIDR_EL2))) ==> return *(var+READ_SYSREG(TPIDR_EL2)). Current cpu offset is saved in TPIDR_EL2
 
 #endif
 

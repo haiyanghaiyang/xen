@@ -134,7 +134,7 @@ void init_traps(void)
      * Setup Hyp vector base. Note they might get updated with the
      * branch predictor hardening.
      */
-    WRITE_SYSREG((vaddr_t)hyp_traps_vector, VBAR_EL2);
+    WRITE_SYSREG((vaddr_t)hyp_traps_vector, VBAR_EL2); ==> Set trap vector base address for EL2
 
     /* Trap Debug and Performance Monitor accesses */
     WRITE_SYSREG(HDCR_TDRA|HDCR_TDOSA|HDCR_TDA|HDCR_TPM|HDCR_TPMCR,
@@ -159,7 +159,26 @@ void init_traps(void)
      * is scheduled. {A,I,F}MO bits are set to allow EL2 receiving
      * interrupts.
      */
-    WRITE_SYSREG(HCR_AMO | HCR_FMO | HCR_IMO, HCR_EL2);
+    WRITE_SYSREG(HCR_AMO | HCR_FMO | HCR_IMO, HCR_EL2); ==>addr
+
+    AMO, bit [5]
+SError interrupt Mask Override. When this bit is set to 1, it overrides the effect of CPSR.A, and enables virtual exception signaling by the VA bit.
+If the value of HCR.TGE is 0, then virtual SError interrupts are enabled in Non-secure state.
+If the value of HCR.TGE is 1, then in Non-secure state the HCR.AMO bit behaves as 1 for all purposes other than a direct read of the value of the bit.
+In a system where the PE resets into EL2 or EL3, this field resets to 0.
+
+    FMO, bit [3]
+FIQ Mask Override. When this bit is set to 1, it overrides the effect of CPSR.F, and enables virtual exception signaling by the VF bit.
+If the value of HCR.TGE is 0, then Virtual FIQ interrupts are enabled in the Non-secure state.
+If the value of HCR.TGE is 1, then in Non-secure state the HCR.FMO bit behaves as 1 for all purposes other than a direct read of the value of the bit.
+In a system where the PE resets into EL2 or EL3, this field resets to 0.
+
+    IMO, bit [4]
+IRQ Mask Override. When this bit is set to 1, it overrides the effect of CPSR.I, and enables virtual exception signaling by the VI bit.
+If the value of HCR.TGE is 0, then Virtual IRQ interrupts are enabled in the Non-secure state.
+If the value of HCR.TGE is 1, then in Non-secure state the HCR.IMO bit behaves as 1 for all purposes other than a direct read of the value of the bit.
+In a system where the PE resets into EL2 or EL3, this field resets to 0.
+
     isb();
 }
 

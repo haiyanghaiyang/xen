@@ -16,7 +16,7 @@
  * macro expanded.
  */
 #define DEFINE_PER_CPU(type, name) \
-    __DEFINE_PER_CPU(__section(".bss.percpu"), type, _ ## name)
+    __DEFINE_PER_CPU(__section(".bss.percpu"), type, _ ## name) ==> Define per cpu variable
 
 #define DEFINE_PER_CPU_PAGE_ALIGNED(type, name) \
     typedef char name ## _chk_t \

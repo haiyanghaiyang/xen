@@ -352,9 +352,9 @@ static inline lpae_t mfn_to_xen_entry(mfn_t mfn, unsigned attr)
         break;
     }
 
-    ASSERT(!(mfn_to_maddr(mfn) & ~PADDR_MASK));
+    ASSERT(!(mfn_to_maddr(mfn) & ~PADDR_MASK)); ==> assert maddr only have bit set of PADDR_MASK
 
-    lpae_set_mfn(e, mfn);
+    lpae_set_mfn(e, mfn); ==> set e.walk.base to machine address
 
     return e;
 }
@@ -642,13 +642,13 @@ void __init setup_pagetables(unsigned long boot_phys_offset)
     lpae_t pte, *p;
     int i;
 
-    phys_offset = boot_phys_offset;
+    phys_offset = boot_phys_offset; ==> reserved memory for bootloader ^
 
-#ifdef CONFIG_ARM_64
-    p = (void *) xen_pgtable;
-    p[0] = pte_of_xenaddr((uintptr_t)xen_first);
+#ifdef CONFIG_ARM_64 ==> ARM64 has three levels LPAE translation table, and each has 512 entries.
+    p = (void *) xen_pgtable; ==> xen_pgtable -> xen_first -> xen_second -> xen_xenmap
+    p[0] = pte_of_xenaddr((uintptr_t)xen_first); ==> xen_first is the virtual address of first level page table
     p[0].pt.table = 1;
-    p[0].pt.xn = 0;
+    p[0].pt.xn = 0; ==> not executable
     p = (void *) xen_first;
 #else
     p = (void *) cpu0_pgtable;
@@ -657,7 +657,7 @@ void __init setup_pagetables(unsigned long boot_phys_offset)
     /* Initialise first level entries, to point to second level entries */
     for ( i = 0; i < 2; i++)
     {
-        p[i] = pte_of_xenaddr((uintptr_t)(xen_second+i*LPAE_ENTRIES));
+        p[i] = pte_of_xenaddr((uintptr_t)(xen_second+i*LPAE_ENTRIES)); ==> p[i] is address of first level page table, and save lpae table of second level page table
         p[i].pt.table = 1;
         p[i].pt.xn = 0;
     }

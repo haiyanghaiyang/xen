@@ -59,7 +59,7 @@
 #include <xen/perfc.h>
 #include <public/memory.h>
 
-TYPE_SAFE(unsigned long, mfn);
+TYPE_SAFE(unsigned long, mfn); ==> mfn_t defined here
 #define PRI_mfn          "05lx"
 #define INVALID_MFN      _mfn(~0UL)
 /*

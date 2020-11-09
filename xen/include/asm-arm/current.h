@@ -53,8 +53,8 @@ DECLARE_PER_CPU(unsigned int, cpu_id);
 #define get_processor_id()     this_cpu(cpu_id)
 #define set_processor_id(id)                            \
 do {                                                    \
-    WRITE_SYSREG(__per_cpu_offset[(id)], TPIDR_EL2);    \
-    this_cpu(cpu_id) = (id);                            \
+    WRITE_SYSREG(__per_cpu_offset[(id)], TPIDR_EL2);    \ ==> Write per cpu variable offset for current cpu into EL2 status register
+    this_cpu(cpu_id) = (id);                            \ ==> Set current cpu id per cpu area of current cpu
 } while ( 0 )
 
 #endif

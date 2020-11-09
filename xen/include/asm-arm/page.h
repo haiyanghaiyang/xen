@@ -266,7 +266,7 @@ static inline uint64_t va_to_par(vaddr_t va)
 {
     uint64_t par = __va_to_par(va);
     /* It is not OK to call this with an invalid VA */
-    if ( par & PAR_F )
+    if ( par & PAR_F ) ==> If PAR_F is set, it means the translation is failed
     {
         dump_hyp_walk(va);
         panic_PAR(par);
@@ -279,7 +279,7 @@ static inline int gva_to_ipa(vaddr_t va, paddr_t *paddr, unsigned int flags)
     uint64_t par = gva_to_ipa_par(va, flags);
     if ( par & PAR_F )
         return -EFAULT;
-    *paddr = (par & PADDR_MASK & PAGE_MASK) | ((unsigned long) va & ~PAGE_MASK);
+    *paddr = (par & PADDR_MASK & PAGE_MASK) | ((unsigned long) va & ~PAGE_MASK); ==> paddr = (addr & page mask of par) | (non-page mask part of va)
     return 0;
 }
 

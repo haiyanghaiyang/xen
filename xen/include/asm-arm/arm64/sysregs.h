@@ -65,7 +65,7 @@
 
 #define WRITE_SYSREG64(v, name) do {                    \
     uint64_t _r = v;                                    \
-    asm volatile("msr "__stringify(name)", %0" : : "r" (_r));       \
+    asm volatile("msr "__stringify(name)", %0" : : "r" (_r));       \ ==> msr moves value from core register into status register (CPSR or SPSR). The value v is put into %0 first and then move into register in name.
 } while (0)
 #define READ_SYSREG64(name) ({                          \
     uint64_t _r;                                        \

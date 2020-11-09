@@ -103,7 +103,7 @@
 #define RELOC_HIDE(ptr, off)                    \
   ({ unsigned long __ptr;                       \
     __asm__ ("" : "=r"(__ptr) : "0"(ptr));      \
-    (typeof(ptr)) (__ptr + (off)); })
+    (typeof(ptr)) (__ptr + (off)); }) ==> return (typeof(ptr))*(ptr+off)
 
 #ifdef __GCC_ASM_FLAG_OUTPUTS__
 # define ASM_FLAG_OUT(yes, no) yes

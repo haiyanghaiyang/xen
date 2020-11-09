@@ -46,14 +46,15 @@ static inline void invalidate_icache_local(void)
 }
 
 /* Ask the MMU to translate a VA for us */
-static inline uint64_t __va_to_par(vaddr_t va)
+static inline uint64_t __va_to_par(vaddr_t va) ==> PAR: Physical Address Register
 {
     uint64_t par, tmp = READ_SYSREG64(PAR_EL1);
 
-    asm volatile ("at s1e2r, %0;" : : "r" (va));
-    isb();
-    par = READ_SYSREG64(PAR_EL1);
-    WRITE_SYSREG64(tmp, PAR_EL1);
+    asm volatile ("at s1e2r, %0;" : : "r" (va)); ==> Perform stage-1 translation for EL2
+    ==> https://developer.arm.com/docs/ddi05__va_to_par95/h/aarch64-system-instructions/at-s1e2r
+    isb(); ==> instruction isolation barrier
+    par = READ_SYSREG64(PAR_EL1); ==> convert @va into phyiscal address and read it from PAR_EL1
+    WRITE_SYSREG64(tmp, PAR_EL1); ==> restore register
     return par;
 }
 
@@ -63,7 +64,7 @@ static inline uint64_t gva_to_ma_par(vaddr_t va, unsigned int flags)
     uint64_t par, tmp = READ_SYSREG64(PAR_EL1);
 
     if ( (flags & GV2M_WRITE) == GV2M_WRITE )
-        asm volatile ("at s12e1w, %0;" : : "r" (va));
+        asm volatile ("at s12e1w, %0;" : : "r" (va)); ==> stage 1 & 2 address translation for EL1
     else
         asm volatile ("at s12e1r, %0;" : : "r" (va));
     isb();
@@ -77,7 +78,7 @@ static inline uint64_t gva_to_ipa_par(vaddr_t va, unsigned int flags)
     uint64_t par, tmp = READ_SYSREG64(PAR_EL1);
 
     if ( (flags & GV2M_WRITE) == GV2M_WRITE )
-        asm volatile ("at s1e1w, %0;" : : "r" (va));
+        asm volatile ("at s1e1w, %0;" : : "r" (va)); ==> stage 1 address translation for EL1
     else
         asm volatile ("at s1e1r, %0;" : : "r" (va));
     isb();

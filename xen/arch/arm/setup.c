@@ -797,7 +797,7 @@ size_t __read_mostly dcache_line_bytes;
 
 /* C entry point for boot CPU */
 void __init start_xen(unsigned long boot_phys_offset,
-                      unsigned long fdt_paddr)
+                      unsigned long fdt_paddr) ==> Entry of xen from asm code
 {
     size_t fdt_size;
     int cpus, i;
@@ -814,7 +814,7 @@ void __init start_xen(unsigned long boot_phys_offset,
 
     dcache_line_bytes = read_dcache_line_bytes();
 
-    percpu_init_areas();
+    percpu_init_areas(); ==> init area for each cpu
     set_processor_id(0); /* needed early, for smp_processor_id() */
 
     setup_virtual_regions(NULL, NULL);
