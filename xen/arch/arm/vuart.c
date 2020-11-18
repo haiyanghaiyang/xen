@@ -93,11 +93,11 @@ static void vuart_print_char(struct vcpu *v, char c)
         return ;
 
     spin_lock(&uart->lock);
-    uart->buf[uart->idx++] = c;
+    uart->buf[uart->idx++] = c; ==> Add c into uart buffer
     if ( (uart->idx == (VUART_BUF_SIZE - 2)) || (c == '\n') )
     {
         if ( c != '\n' )
-            uart->buf[uart->idx++] = '\n';
+            uart->buf[uart->idx++] = '\n'; ==> Add newline when reading VUART_BUF_SIZE
         uart->buf[uart->idx] = '\0';
         printk(XENLOG_G_DEBUG "DOM%u: %s", d->domain_id, uart->buf);
         uart->idx = 0;

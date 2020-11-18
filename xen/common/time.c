@@ -106,7 +106,7 @@ void update_domain_wallclock_time(struct domain *d)
     smp_wmb();
 
     sec = wc_sec + d->time_offset.seconds;
-    shared_info(d, wc_sec)    = sec;
+    shared_info(d, wc_sec)    = sec; ==> Save current time into shared info
     shared_info(d, wc_nsec)   = wc_nsec;
 #ifdef CONFIG_X86
     if ( likely(!has_32bit_shinfo(d)) )

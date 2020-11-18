@@ -749,7 +749,7 @@ static void __init setup_mm(void)
     init_pdx();
 
     total_pages = 0;
-    for ( bank = 0 ; bank < bootinfo.mem.nr_banks; bank++ )
+    for ( bank = 0 ; bank < bootinfo.mem.nr_banks; bank++ ) ==> The bootinfo.mem.bank are lists of heap areas?
     {
         paddr_t bank_start = bootinfo.mem.bank[bank].start;
         paddr_t bank_size = bootinfo.mem.bank[bank].size;
@@ -857,7 +857,7 @@ void __init start_xen(unsigned long boot_phys_offset,
      */
     system_state = SYS_STATE_boot;
 
-    vm_init();
+    vm_init(); ==> virtual memory initialization
 
     if ( acpi_disabled )
     {
@@ -928,7 +928,7 @@ void __init start_xen(unsigned long boot_phys_offset,
 
     console_init_postirq();
 
-    do_presmp_initcalls();
+    do_presmp_initcalls(); ==> Init before SMP
 
     for_each_present_cpu ( i )
     {

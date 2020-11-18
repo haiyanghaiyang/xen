@@ -354,7 +354,7 @@ void add_taint(unsigned int flag)
     tainted |= flag;
 }
 
-extern const initcall_t __initcall_start[], __presmp_initcall_end[],
+extern const initcall_t __initcall_start[], __presmp_initcall_end[], ==> defined in init.h, __init_call(lvl), like __initcall(cpu_stopmachine_init);
     __initcall_end[];
 
 void __init do_presmp_initcalls(void)

@@ -243,7 +243,7 @@ static void __init gic_dt_preinit(void)
         if ( !dt_get_parent(node) )
             continue;
 
-        rc = device_init(node, DEVICE_GIC, NULL);
+        rc = device_init(node, DEVICE_GIC, NULL); ==> Detect device in device tree
         if ( !rc )
         {
             /* NOTE: Only one GIC is supported */
@@ -256,7 +256,7 @@ static void __init gic_dt_preinit(void)
 
     /* Set the GIC as the primary interrupt controller */
     dt_interrupt_controller = node;
-    dt_device_set_used_by(node, DOMID_XEN);
+    dt_device_set_used_by(node, DOMID_XEN); ==> Set the GIC used by XEN
 }
 
 #ifdef CONFIG_ACPI
@@ -295,7 +295,7 @@ void __init gic_init(void)
     if ( gic_hw_ops->init() )
         panic("Failed to initialize the GIC drivers\n");
     /* Clear LR mask for cpu0 */
-    clear_cpu_lr_mask();
+    clear_cpu_lr_mask(); ==> What is lr mask?
 }
 
 void send_SGI_mask(const cpumask_t *cpumask, enum gic_sgi sgi)

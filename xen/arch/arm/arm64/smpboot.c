@@ -33,7 +33,7 @@ static int __init smp_spin_table_cpu_up(int cpu)
         return -EFAULT;
     }
 
-    writeq(__pa(init_secondary), release);
+    writeq(__pa(init_secondary), release); ==> Write init_secondary into CPU release address (which let CPU start running from there?) 
 
     iounmap(release);
 

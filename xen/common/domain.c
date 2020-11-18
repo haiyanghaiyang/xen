@@ -183,7 +183,7 @@ struct vcpu *vcpu_create(struct domain *d, unsigned int vcpu_id)
     if ( sched_init_vcpu(v) != 0 )
         goto fail_wq;
 
-    if ( arch_vcpu_create(v) != 0 )
+    if ( arch_vcpu_create(v) != 0 ) ==> architecture depedent vcpu create
         goto fail_sched;
 
     d->vcpu[vcpu_id] = v;
@@ -362,7 +362,7 @@ struct domain *domain_create(domid_t domid,
            INIT_evtchn = 1u<<3, INIT_gnttab = 1u<<4, INIT_arch = 1u<<5 };
     int err, init_status = 0;
 
-    if ( config && (err = sanitise_domain_config(config)) )
+    if ( config && (err = sanitise_domain_config(config)) ) ==> check whether config meets basic requirement
         return ERR_PTR(err);
 
     if ( (d = alloc_domain_struct()) == NULL )
@@ -398,7 +398,7 @@ struct domain *domain_create(domid_t domid,
     if ( !is_system_domain(d) )
     {
         err = -ENOMEM;
-        d->vcpu = xzalloc_array(struct vcpu *, config->max_vcpus);
+        d->vcpu = xzalloc_array(struct vcpu *, config->max_vcpus); ==> Allocate virtual cpu for non-system domain
         if ( !d->vcpu )
             goto fail;
 
@@ -470,7 +470,7 @@ struct domain *domain_create(domid_t domid,
         if ( !d->iomem_caps || !d->irq_caps )
             goto fail;
 
-        if ( (err = xsm_domain_create(XSM_HOOK, d, config->ssidref)) != 0 )
+        if ( (err = xsm_domain_create(XSM_HOOK, d, config->ssidref)) != 0 ) ==> What is xsm?
             goto fail;
 
         d->controller_pause_count = 1;

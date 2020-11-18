@@ -22,7 +22,7 @@
 #include <xen/init.h>
 #include <xen/lib.h>
 
-extern const struct device_desc _sdevice[], _edevice[];
+extern const struct device_desc _sdevice[], _edevice[]; ==> Defined by DT_DEVICE_START
 extern const struct acpi_device_desc _asdevice[], _aedevice[];
 
 int __init device_init(struct dt_device_node *dev, enum device_class class,
@@ -40,11 +40,11 @@ int __init device_init(struct dt_device_node *dev, enum device_class class,
         if ( desc->class != class )
             continue;
 
-        if ( dt_match_node(desc->dt_match, dev) )
+        if ( dt_match_node(desc->dt_match, dev) ) ==> Match name with defined device
         {
             ASSERT(desc->init != NULL);
 
-            return desc->init(dev, data);
+            return desc->init(dev, data); ==> Call device initialization
         }
 
     }

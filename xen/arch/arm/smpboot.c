@@ -101,8 +101,8 @@ smp_clear_cpu_maps (void)
 {
     cpumask_clear(&cpu_possible_map);
     cpumask_clear(&cpu_online_map);
-    cpumask_set_cpu(0, &cpu_online_map);
-    cpumask_set_cpu(0, &cpu_possible_map);
+    cpumask_set_cpu(0, &cpu_online_map); ==> set cpu 0 into mask of cpu_online_map
+    cpumask_set_cpu(0, &cpu_possible_map); ==> set cpu 0 into mask of cpu_possible_map
     cpu_logical_map(0) = READ_SYSREG(MPIDR_EL1) & MPIDR_HWID_MASK;
 }
 
@@ -435,10 +435,10 @@ int __cpu_up(unsigned int cpu)
     init_data.cpuid = cpu;
 
     /* Open the gate for this CPU */
-    smp_up_cpu = cpu_logical_map(cpu);
+    smp_up_cpu = cpu_logical_map(cpu); ==> Release CPU which is waiting at header.S, init_secondary
     clean_dcache(smp_up_cpu);
 
-    rc = arch_cpu_up(cpu);
+    rc = arch_cpu_up(cpu); ==> Run SMP CPU start from init_secondary entry in header.S, and then start_secondary()
 
     console_end_sync();
 
@@ -450,7 +450,7 @@ int __cpu_up(unsigned int cpu)
 
     deadline = NOW() + MILLISECS(1000);
 
-    while ( !cpu_online(cpu) && NOW() < deadline )
+    while ( !cpu_online(cpu) && NOW() < deadline ) ==> Wait for CPU online
     {
         cpu_relax();
         process_pending_softirqs();

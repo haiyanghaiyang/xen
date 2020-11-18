@@ -22,7 +22,7 @@
 #include <xen/init.h>
 #include <asm/psci.h>
 
-extern const struct platform_desc _splatform[], _eplatform[];
+extern const struct platform_desc _splatform[], _eplatform[]; ==> All platforms with PLATFORM_START
 
 /* Pointer to the current platform description */
 static const struct platform_desc *platform;

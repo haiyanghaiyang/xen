@@ -228,7 +228,7 @@ void __init apply_alternatives_all(void)
     ASSERT(system_state != SYS_STATE_active);
 
 	/* better not try code patching on a live SMP system */
-    ret = stop_machine_run(__apply_alternatives_multi_stop, NULL, NR_CPUS);
+    ret = stop_machine_run(__apply_alternatives_multi_stop, NULL, NR_CPUS); ==> What does this function mean?
 
     /* stop_machine_run should never fail at this stage of the boot */
     BUG_ON(ret);

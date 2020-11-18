@@ -63,15 +63,15 @@ hw_irq_controller no_irq_type = {
     .end = end_none
 };
 
-static irq_desc_t irq_desc[NR_IRQS];
-static DEFINE_PER_CPU(irq_desc_t[NR_LOCAL_IRQS], local_irq_desc);
+static irq_desc_t irq_desc[NR_IRQS]; ==> Shared IRQ description, not per cpu
+static DEFINE_PER_CPU(irq_desc_t[NR_LOCAL_IRQS], local_irq_desc); ==> Define per cpu IRQ descrption
 
 irq_desc_t *__irq_to_desc(int irq)
 {
     if ( irq < NR_LOCAL_IRQS )
-        return &this_cpu(local_irq_desc)[irq];
+        return &this_cpu(local_irq_desc)[irq]; ==> return per cpu local IRQ
 
-    return &irq_desc[irq-NR_LOCAL_IRQS];
+    return &irq_desc[irq-NR_LOCAL_IRQS]; ==> return global IRQ
 }
 
 int arch_init_one_irq_desc(struct irq_desc *desc)
@@ -81,7 +81,7 @@ int arch_init_one_irq_desc(struct irq_desc *desc)
 }
 
 
-static int __init init_irq_data(void)
+static int __init init_irq_data(void) ==> global IRQ
 {
     int irq;
 
@@ -96,7 +96,7 @@ static int __init init_irq_data(void)
     return 0;
 }
 
-static int init_local_irq_data(void)
+static int init_local_irq_data(void) ==> per cpu local IRQ
 {
     int irq;
 

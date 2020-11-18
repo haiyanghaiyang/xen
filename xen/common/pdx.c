@@ -96,8 +96,8 @@ void __init pfn_pdx_hole_setup(unsigned long mask)
             break;
         if ( j - i > hole_shift )
         {
-            hole_shift = j - i;
-            bottom_shift = i;
+            hole_shift = j - i; ==> max hole shift, between two 1
+            bottom_shift = i;   ==> the bottom 0 position of the hole
         }
     }
     if ( !hole_shift )

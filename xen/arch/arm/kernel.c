@@ -272,11 +272,11 @@ static __init int kernel_decompress(struct bootmodule *mod)
     if ( !gzip_check(magic, size) )
         return -EINVAL;
 
-    input = ioremap_cache(addr, size);
+    input = ioremap_cache(addr, size); ==> Map physical address into virtual address?
     if ( input == NULL )
         return -EFAULT;
 
-    output_size = output_length(input, size);
+    output_size = output_length(input, size); ==> Decoded size
     kernel_order_out = get_order_from_bytes(output_size);
     pages = alloc_domheap_pages(NULL, kernel_order_out, 0);
     if ( pages == NULL )
@@ -292,7 +292,7 @@ static __init int kernel_decompress(struct bootmodule *mod)
     iounmap(input);
     vunmap(output);
 
-    mod->start = page_to_maddr(pages);
+    mod->start = page_to_maddr(pages); ==> Kernel start address
     mod->size = output_size;
 
     /*
@@ -420,7 +420,7 @@ static int __init kernel_zimage32_probe(struct kernel_info *info,
 }
 
 int __init kernel_probe(struct kernel_info *info,
-                        const struct dt_device_node *domain)
+                        const struct dt_device_node *domain) ==> probe kernel information save in @info. @domain is NULL for dom0
 {
     struct bootmodule *mod = NULL;
     struct bootcmdline *cmd = NULL;
@@ -429,11 +429,11 @@ int __init kernel_probe(struct kernel_info *info,
     int rc;
 
     /* domain is NULL only for the hardware domain */
-    if ( domain == NULL )
+    if ( domain == NULL ) ==> dom0 (hardware domain)
     {
         ASSERT(is_hardware_domain(info->d));
 
-        mod = boot_module_find_by_kind(BOOTMOD_KERNEL);
+        mod = boot_module_find_by_kind(BOOTMOD_KERNEL); ==> boot module is added in process_multiboot_node()
 
         info->kernel_bootmodule = mod;
         info->initrd_bootmodule = boot_module_find_by_kind(BOOTMOD_RAMDISK);
@@ -446,7 +446,7 @@ int __init kernel_probe(struct kernel_info *info,
     {
         const char *name = NULL;
 
-        dt_for_each_child_node(domain, node)
+        dt_for_each_child_node(domain, node) ==> For each device node in the domainU device tree
         {
             if ( dt_device_is_compatible(node, "multiboot,kernel") )
             {

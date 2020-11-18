@@ -398,7 +398,7 @@ static void __init create_mappings(lpae_t *second,
     ASSERT(!(base_mfn % granularity));
     ASSERT(!(nr_mfns % granularity));
 
-    count = nr_mfns / LPAE_ENTRIES;
+    count = nr_mfns / LPAE_ENTRIES; ==> Calculate how many entries is required
     p = second + second_linear_offset(virt_offset);
     pte = mfn_to_xen_entry(_mfn(base_mfn), MT_NORMAL);
     if ( granularity == 16 * LPAE_ENTRIES )
@@ -577,15 +577,15 @@ void * __init early_fdt_map(paddr_t fdt_paddr)
     BUILD_BUG_ON(BOOT_FDT_VIRT_START % SZ_2M);
 
     create_mappings(xen_second, BOOT_FDT_VIRT_START, paddr_to_pfn(base_paddr),
-                    SZ_2M >> PAGE_SHIFT, SZ_2M);
+                    SZ_2M >> PAGE_SHIFT, SZ_2M); ==> map (base_paddr, base_paddr + 2MB) to virtual address from BOOT_FDT_VIRT_START
 
     offset = fdt_paddr % SECOND_SIZE;
     fdt_virt = (void *)BOOT_FDT_VIRT_START + offset;
 
-    if ( fdt_magic(fdt_virt) != FDT_MAGIC )
+    if ( fdt_magic(fdt_virt) != FDT_MAGIC ) ==> check magic with virtual address @fdt_virt
         return NULL;
 
-    size = fdt_totalsize(fdt_virt);
+    size = fdt_totalsize(fdt_virt); ==> get fdt size
     if ( size > MAX_FDT_SIZE )
         return NULL;
 
@@ -708,7 +708,7 @@ void __init setup_pagetables(unsigned long boot_phys_offset)
     ttbr = (uintptr_t) cpu0_pgtable + phys_offset;
 #endif
 
-    switch_ttbr(ttbr);
+    switch_ttbr(ttbr); ==> set ttbr into TTBR0_EL2 which is page tabe base address of EL2
 
     xen_pt_enforce_wnx();
 
@@ -817,7 +817,7 @@ void __init setup_xenheap_mappings(unsigned long base_mfn,
     vaddr_t vaddr;
 
     /* Align to previous 1GB boundary */
-    mfn = base_mfn & ~((FIRST_SIZE>>PAGE_SHIFT)-1);
+    mfn = base_mfn & ~((FIRST_SIZE>>PAGE_SHIFT)-1); ==> FIRST_SIZE = 1 << 10 << 9 << 9 = 1G
 
     /* First call sets the xenheap physical and virtual offset. */
     if ( mfn_eq(xenheap_mfn_start, INVALID_MFN) )
